@@ -28,6 +28,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex){
+        List<String> errors = ex.getErrors();
+        ErrorResponse err = buildError("unauthorized access",errors);
+        return new ResponseEntity<>(err,HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         ErrorResponse err =  buildError("An unexpected error occurred", List.of("Please contact support"));

@@ -36,7 +36,7 @@ public class ProductControllerTest {
             }
             """;
 
-        mockMvc.perform(post("/product")
+        mockMvc.perform(post("/api/v1/product")
                         .contentType(MediaType.APPLICATION_JSON)
                                 .content(productJson))
                 .andExpect(status().isOk())
