@@ -25,7 +25,7 @@ public class ProductService {
 
         Authentication authToken = SecurityContextHolder.getContext().getAuthentication();
         String userName = authToken.getName();
-        product.setUser(userRepo.findByNameOrEmail(userName,userName));
+        product.setCreator(userRepo.findByNameOrEmail(userName,userName));
         List<String> errors = validateProduct(product);
         if(!errors.isEmpty()){
             throw new InvalidProductException(errors);

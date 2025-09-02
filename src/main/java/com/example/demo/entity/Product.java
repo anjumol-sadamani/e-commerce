@@ -1,9 +1,13 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.validation.constraints.*;
 
 @Entity
@@ -26,5 +30,9 @@ public class Product {
     @ManyToOne
     @JoinColumn(name="user_id")
     private User creator;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "products")
+    private Set<Category> categories = new HashSet<>();
 
 }
