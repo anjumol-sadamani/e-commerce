@@ -1,8 +1,10 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +21,7 @@ public class Order {
 
     private Date date;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderItem> orderItems;
+    @JsonIgnore
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems = new ArrayList<>();
 }
