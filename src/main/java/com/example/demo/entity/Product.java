@@ -1,9 +1,6 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -25,5 +22,9 @@ public class Product {
     @PositiveOrZero(message = "Stock must be zero or positive")
     private int stock;
     private String brand;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
 
 }

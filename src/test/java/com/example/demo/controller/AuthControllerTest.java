@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -42,7 +43,7 @@ public class AuthControllerTest {
                 }
                 """;
 
-        User someUser = new User(1L,"testUser","password","email", Role.USER);
+        User someUser = new User(1L,"testUser","password","email", Role.USER,new ArrayList<>());
 
         when(authService.authenticateUser(any(LoginRequest.class))).thenReturn(someUser);
         when(jwtUtil.createJwtToken(any(User.class))).thenReturn("fakeToken");

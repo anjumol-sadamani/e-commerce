@@ -3,11 +3,16 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
-@Table(name = "customers")
 @AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "customers")
 public class User {
 
     @Id
@@ -20,5 +25,8 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role userRole = Role.USER;
+
+    @OneToMany(mappedBy = "userId",fetch = FetchType.LAZY)
+    private List<Product> productList = new ArrayList<>();
 
 }

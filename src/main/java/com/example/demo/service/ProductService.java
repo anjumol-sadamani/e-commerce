@@ -3,8 +3,10 @@ package com.example.demo.service;
 import com.example.demo.entity.Product;
 import com.example.demo.exception.InvalidProductException;
 import com.example.demo.repository.ProductRepository;
+import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,17 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
-    @Autowired
-    private ProductRepository productRepo;
+    private final  ProductRepository productRepo;
+    private final UserRepository userRepo;
 
-    public List<Product> findAllProducts(){
-        return productRepo.findAll();
-    }
 
     public void createProduct(Product product){
 
+        Authentication authToken = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authToken.getName();
+        product.setUser(userRepo.findByNameOrEmail(userName,userName));
         List<String> errors = validateProduct(product);
         if(!errors.isEmpty()){
             throw new InvalidProductException(errors);
