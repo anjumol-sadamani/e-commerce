@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.CategoryRequest;
+import com.example.demo.dto.CategoryRequest;
 import com.example.demo.entity.Product;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;

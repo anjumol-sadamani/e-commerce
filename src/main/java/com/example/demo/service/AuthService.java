@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.LoginRequest;
+import com.example.demo.dto.LoginRequest;
 import com.example.demo.entity.User;
 import com.example.demo.exception.UnauthorizedException;
 import com.example.demo.repository.UserRepository;

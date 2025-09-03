@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Category;
-import com.example.demo.entity.CategoryRequest;
+import com.example.demo.dto.CategoryRequest;
 import com.example.demo.entity.Product;
 import com.example.demo.exception.InvalidProductException;
 import com.example.demo.repository.CategoryRepository;

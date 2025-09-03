@@ -1,8 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.LoginRequest;
+import com.example.demo.dto.LoginRequest;
 import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
+import com.example.demo.entity.UserProfile;
 import com.example.demo.exception.UnauthorizedException;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.AuthService;
@@ -43,7 +44,7 @@ public class AuthControllerTest {
                 }
                 """;
 
-        User someUser = new User(1L,"testUser","password","email", Role.USER,new ArrayList<>());
+        User someUser = new User(1L,"testUser","password","email", Role.USER,new ArrayList<>(), new UserProfile());
 
         when(authService.authenticateUser(any(LoginRequest.class))).thenReturn(someUser);
         when(jwtUtil.createJwtToken(any(User.class))).thenReturn("fakeToken");
