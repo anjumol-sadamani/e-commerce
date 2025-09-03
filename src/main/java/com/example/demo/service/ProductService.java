@@ -70,6 +70,22 @@ public class ProductService {
          return product;
     }
 
+    public Product deleteCategoryFromProduct(Long id, Long categoryId) {
+       Product product = productRepo.findById(id)
+               .orElseThrow(()-> new InvalidProductException(List.of("product didnt exists")));
+
+       boolean wasRemoved = product
+               .getCategories()
+               .removeIf(category -> category.getId().equals(categoryId));
+
+       if (!wasRemoved){
+           throw new InvalidProductException(List.of("Category not found in product"));
+
+       }
+        productRepo.save(product);
+        return product;
+    }
+
     private List<String> validateProduct(Product product) {
         List<String> errors = new ArrayList<>();
         if(product.getStock() <0 ){
@@ -80,6 +96,7 @@ public class ProductService {
         }
         return errors;
     }
+
 
 
 }
