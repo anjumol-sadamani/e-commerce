@@ -1,7 +1,10 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Category;
+import com.example.demo.entity.CategoryRequest;
 import com.example.demo.entity.Product;
 import com.example.demo.exception.InvalidProductException;
+import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +22,7 @@ public class ProductService {
 
     private final  ProductRepository productRepo;
     private final UserRepository userRepo;
+    private final CategoryRepository categoryRepo;
 
 
     public void createProduct(Product product){
@@ -38,6 +42,32 @@ public class ProductService {
             throw new InvalidProductException(List.of("product not found"));
         }
         else return productRepo.findById(id).get();
+    }
+
+    public Product assignCategory(Long id, CategoryRequest req){
+
+      Product product = productRepo.findById(id)
+                .orElseThrow(()-> new InvalidProductException(List.of("Product not found")));
+
+      List<String> requestedCategoryNames = req.getCategoryNames();
+      Set<Category> categories = categoryRepo.findAllByNameIn(requestedCategoryNames)
+              .orElseThrow(()-> new InvalidProductException(List.of("all the provided categories didn't exists")));
+
+      Set<String> foundCategoryNames = categories.stream()
+              .map(Category::getName)
+              .collect(Collectors.toSet());
+
+      Set<String> missing = requestedCategoryNames.stream()
+              .filter(name -> !foundCategoryNames.contains(name))
+              .collect(Collectors.toSet());
+
+      if(!missing.isEmpty()){
+          throw new InvalidProductException(missing.stream().toList());
+      }
+
+       product.setCategories(categories);
+        productRepo.save(product);
+         return product;
     }
 
     private List<String> validateProduct(Product product) {

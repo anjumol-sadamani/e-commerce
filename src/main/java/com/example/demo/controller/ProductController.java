@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.CategoryRequest;
 import com.example.demo.entity.Product;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
@@ -23,6 +24,12 @@ public class ProductController {
     @GetMapping("/product")
     public ResponseEntity<Product> getProduct(@RequestParam Long Id){
         Product product = productService.getProduct(Id);
+        return ResponseEntity.ok(product);
+    }
+
+    @PostMapping("/product/{id}/categories")
+    public ResponseEntity<Product> assignCategory(@PathVariable Long id, @RequestBody CategoryRequest categoryRequest){
+        Product product = productService.assignCategory(id,categoryRequest);
         return ResponseEntity.ok(product);
     }
 }
