@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Role;
 import com.example.demo.entity.User;
 import com.example.demo.exception.InvalidProductException;
 import com.example.demo.repository.UserRepository;
@@ -24,5 +25,17 @@ public class UserService {
        } else {
            return userRepository.findById(id).get();
        }
+    }
+
+    public List<User> getAllAdminUsers(){
+        List<User> users = userRepository.findAll();
+
+        if(users.isEmpty()){
+            throw new InvalidProductException(List.of("users are empty"));
+        }
+
+       return users.stream()
+               .filter(user -> user.getUserRole().equals(Role.ADMIN))
+               .toList();
     }
 }

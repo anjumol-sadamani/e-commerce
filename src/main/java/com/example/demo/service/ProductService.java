@@ -3,6 +3,8 @@ package com.example.demo.service;
 import com.example.demo.entity.Category;
 import com.example.demo.dto.CategoryRequest;
 import com.example.demo.entity.Product;
+import com.example.demo.entity.Role;
+import com.example.demo.entity.User;
 import com.example.demo.exception.InvalidProductException;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
@@ -86,6 +88,21 @@ public class ProductService {
         return product;
     }
 
+    public List<Product> getAllProductsGreaterThan100Dollars(){
+        List<Product> products = productRepo.findAll();
+
+        if(products.isEmpty()){
+            throw new InvalidProductException(List.of("products are empty"));
+        }
+
+        return products.stream()
+                .filter(product -> {
+                    int res = product.getPrice().compareTo(new BigDecimal(100));
+                    return res > 0;
+                })
+                .toList();
+    }
+
     private List<String> validateProduct(Product product) {
         List<String> errors = new ArrayList<>();
         if(product.getStock() <0 ){
@@ -96,6 +113,14 @@ public class ProductService {
         }
         return errors;
     }
+
+//    private void saveProduct(){
+//        Category category = new Category();
+//        category.setName("test");
+//        Set<Category> categories = Set.of(category);
+//        Product product = new Product(1L,"name",new BigDecimal(10),5,"brand",new User(),categories);
+//
+//    }
 
 
 
