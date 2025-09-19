@@ -1,3 +1,4 @@
+#multi-stage build - seperating build env from runtime env
 # Stage 1: Build
 FROM maven:3.8-openjdk-17 AS builder
 WORKDIR /app
