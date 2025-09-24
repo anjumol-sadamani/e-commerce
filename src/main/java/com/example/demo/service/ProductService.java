@@ -1,10 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.ProductResponse;
 import com.example.demo.entity.Category;
 import com.example.demo.dto.CategoryRequest;
 import com.example.demo.entity.Product;
-import com.example.demo.entity.Role;
-import com.example.demo.entity.User;
 import com.example.demo.exception.InvalidProductException;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
@@ -15,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,12 +46,12 @@ public class ProductService {
         else return productRepo.findById(id).get();
     }
 
-    public Product assignCategory(Long id, CategoryRequest req){
+    public ProductResponse assignCategory(Long id, CategoryRequest req){
 
       Product product = productRepo.findById(id)
                 .orElseThrow(()-> new InvalidProductException(List.of("Product not found")));
 
-      List<String> requestedCategoryNames = req.getCategoryNames();
+      List<String> requestedCategoryNames = req.categoryNames();
       Set<Category> categories = categoryRepo.findAllByNameIn(requestedCategoryNames)
               .orElseThrow(()-> new InvalidProductException(List.of("all the provided categories didn't exists")));
 
@@ -69,7 +69,7 @@ public class ProductService {
 
        product.setCategories(categories);
         productRepo.save(product);
-         return product;
+         return fromEntity(product);
     }
 
     public Product deleteCategoryFromProduct(Long id, Long categoryId) {
@@ -114,14 +114,15 @@ public class ProductService {
         return errors;
     }
 
-//    private void saveProduct(){
-//        Category category = new Category();
-//        category.setName("test");
-//        Set<Category> categories = Set.of(category);
-//        Product product = new Product(1L,"name",new BigDecimal(10),5,"brand",new User(),categories);
-//
-//    }
+    public static ProductResponse fromEntity(Product product) {
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+        String formattedPrice = currencyFormat.format(product.getPrice());
 
+        Set<String> categoryNames = product.getCategories().stream().map(Category::getName).collect(Collectors.toSet());
+        Set<String> immutableCategoryNames = Set.copyOf(categoryNames);
 
+        return new ProductResponse(product.getName(), formattedPrice, product.getStock(),
+                product.getBrand(), product.getCreator().getName(), immutableCategoryNames);
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.CategoryRequest;
+import com.example.demo.dto.ProductResponse;
 import com.example.demo.entity.Product;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
@@ -28,8 +29,8 @@ public class ProductController {
     }
 
     @PostMapping("/product/{id}/categories")
-    public ResponseEntity<Product> assignCategory(@PathVariable Long id, @RequestBody CategoryRequest categoryRequest){
-        Product product = productService.assignCategory(id,categoryRequest);
+    public ResponseEntity<ProductResponse> assignCategory(@PathVariable Long id, @RequestBody CategoryRequest categoryRequest){
+        ProductResponse product = productService.assignCategory(id,categoryRequest);
         return ResponseEntity.ok(product);
     }
 

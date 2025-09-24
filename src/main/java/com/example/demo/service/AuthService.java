@@ -19,11 +19,11 @@ public class AuthService {
 
     public User authenticateUser(LoginRequest loginRequest) throws UnauthorizedException {
 
-        User validUser = userRepository.findByNameOrEmail(loginRequest.getUsername(),loginRequest.getUsername());
+        User validUser = userRepository.findByNameOrEmail(loginRequest.username(),loginRequest.username());
         if(validUser == null){
             throw new UnauthorizedException(List.of("Invalid credentials"));
         }
-        if(!passwordEncoder.matches(loginRequest.getPassword(), validUser.getPassword())){
+        if(!passwordEncoder.matches(loginRequest.password(), validUser.getPassword())){
             throw new UnauthorizedException(List.of("Invalid credentials"));
         }
         return validUser;
